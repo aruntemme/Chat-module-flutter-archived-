@@ -1,5 +1,4 @@
 import 'package:flutterapp/helper/helperfunctions.dart';
-import 'package:flutterapp/helper/theme.dart';
 import 'package:flutterapp/services/auth.dart';
 import 'package:flutterapp/services/database.dart';
 import 'package:flutterapp/views/chatrooms.dart';
@@ -7,6 +6,7 @@ import 'package:flutterapp/views/forgot_password.dart';
 import 'package:flutterapp/widget/widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterapp/helper/constants.dart';
 
 class SignIn extends StatefulWidget {
   final Function toggleView;
@@ -37,7 +37,7 @@ class _SignInState extends State<SignIn> {
           .signInWithEmailAndPassword(
               emailEditingController.text, passwordEditingController.text)
           .then((result) async {
-        if (result != null)  {
+        if (result != null) {
           QuerySnapshot userInfoSnapshot =
               await DatabaseMethods().getUserInfo(emailEditingController.text);
 
@@ -62,21 +62,55 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarMain(context),
       body: isLoading
           ? Container(
               child: Center(child: CircularProgressIndicator()),
             )
           : Container(
               padding: EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                children: [
-                  Spacer(),
-                  Form(
-                    key: formKey,
+              child: SafeArea(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Text(
+                      "Welcome,",
+                      style:
+                          TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 6,
+                    ),
+                    Text(
+                      "Sign in to continue!",
+                      style:
+                          TextStyle(fontSize: 20, color: Colors.grey.shade400),
+                    ),
+
+                    Spacer(),
+                    Form(
+                      key: formKey,
                     child: Column(
                       children: [
                         TextFormField(
+                          decoration: InputDecoration(
+                            hintStyle: kTextStyleBlack,
+                            labelText: "Email ID",
+                            labelStyle: TextStyle(
+                                fontSize: 14, color: Colors.blueGrey[300]),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(
+                                color: Colors.blueGrey[600],
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                  color: Colors.red,
+                                )),
+                          ),
                           keyboardType: TextInputType.emailAddress,
                           validator: (val) {
                             return RegExp(
@@ -87,114 +121,120 @@ class _SignInState extends State<SignIn> {
                           },
                           controller: emailEditingController,
                           style: simpleTextStyle(),
-                          decoration: textFieldInputDecoration("email"),
                         ),
+                        SizedBox(height: 16,),
                         TextFormField(
+                          decoration: InputDecoration(
+                            labelText: "Password",
+                            labelStyle: TextStyle(
+                                fontSize: 14, color: Colors.blueGrey[300]),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(
+                                color: Colors.blueGrey[600],
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                  color: Colors.red,
+                                )),
+                          ),
                           obscureText: true,
                           validator: (val) {
                             return val.length >= 6
                                 ? null
-                                : "Enter Password 6+ characters";
+                                : "Enter Password More than 6 letters";
                           },
                           style: simpleTextStyle(),
                           controller: passwordEditingController,
-                          decoration: textFieldInputDecoration("password"),
+
                         ),
                       ],
                     ),
-                  ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ForgotPassword()));
-                        },
-                        child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
-                            child: Text(
-                              "Forgot Password?",
-                              style: simpleTextStyle(),
-                            )),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      signIn();
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          gradient: LinearGradient(
-                            colors: [
-                              const Color(0xff007EF4),
-                              const Color(0xff2A75BC)
-                            ],
-                          )),
-                      width: MediaQuery.of(context).size.width,
-                      child: Text(
-                        "Sign In",
-                        style: biggerTextStyle(),
-                        textAlign: TextAlign.center,
-                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 16),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Colors.white),
-                    width: MediaQuery.of(context).size.width,
-                    child: Text(
-                      "Sign In with Google",
-                      style:
-                          TextStyle(fontSize: 17, color: CustomTheme.textColor),
-                      textAlign: TextAlign.center,
+                    SizedBox(
+                      height: 16,
                     ),
-                  ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Don't have account? ",
-                        style: simpleTextStyle(),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          widget.toggleView();
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ForgotPassword()));
+                          },
+                          child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 8),
+                              child: Text(
+                                "Forgot Password?",
+                                style: kTextStyleBlack,
+                              )),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Container(
+                      height: 50,
+                      width: double.infinity,
+                      child: FlatButton(
+                        onPressed: (){
+                          signIn();
                         },
-                        child: Text(
-                          "Register now",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              decoration: TextDecoration.underline),
+                        padding: EdgeInsets.all(0),
+                        child: Ink(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(6),
+                            gradient: LinearGradient(
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [
+                                Color(0xffff5f6d),
+                                Color(0xffff716d),
+                                Color(0xffffc371),
+                              ],
+                            ),
+                          ),
+                          child: Container(
+                            alignment: Alignment.center,
+                            constraints: BoxConstraints(maxWidth: double.infinity,minHeight: 50),
+                            child: Text("Login",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
+                          ),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6),
                         ),
                       ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 50,
-                  )
-                ],
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text("I'm a new user.",style: TextStyle(fontWeight: FontWeight.bold),),
+                        GestureDetector(
+                          onTap: (){
+                            widget.toggleView();
+                          },
+                          child: Text("Sign up",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.red),),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 50,
+                    )
+                  ],
+                ),
               ),
             ),
     );

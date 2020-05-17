@@ -3,6 +3,7 @@ import 'package:flutterapp/services/database.dart';
 import 'package:flutterapp/widget/widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'chatrooms.dart';
 
 
 class Chat extends StatefulWidget {
@@ -15,25 +16,62 @@ class Chat extends StatefulWidget {
 }
 
 class _ChatState extends State<Chat> {
+  final _firestore = Firestore.instance;
 
   Stream<QuerySnapshot> chats;
   TextEditingController messageEditingController = new TextEditingController();
 
   Widget chatMessages(){
-    return StreamBuilder(
-      stream: chats,
-      builder: (context, snapshot){
-        return snapshot.hasData ?  ListView.builder(
-            reverse: true,
-          itemCount: snapshot.data.documents.length,
-            itemBuilder: (context, index){
-              return MessageTile(
-                message: snapshot.data.documents[index].data["message"],
-                sendByMe: Constants.myName == snapshot.data.documents[index].data["sendBy"],
-              );
-            }) : Container();
-      },
-    );
+    return StreamBuilder<QuerySnapshot>(
+        stream: _firestore
+        .collection("chatRoom")
+        .document(widget.chatRoomId)
+        .collection("chats")
+        .orderBy('time')
+        .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.blueAccent,
+              ),
+            );
+          }
+          final messages = snapshot.data.documents.reversed;
+          List<MessageTile> messageBubbles = [];
+          for (var message in messages) {
+            final messageText = message.data['message'];
+            final messageSender = message.data['sendBy'];
+        //    final messageTime = message.data['time'] as Timestamp; //add this
+            final messageBubble = MessageTile(
+              message: messageText,
+              sendByMe: Constants.myName == messageSender,
+            );
+
+            messageBubbles.add(messageBubble);
+          }
+
+          return Expanded(
+            child: ListView(
+                reverse: true,
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                children: messageBubbles),
+          );
+        });
+
+//      stream: chats,
+//      builder: (context, snapshot){
+//        return snapshot.hasData ?  ListView.builder(
+//            reverse: true,
+//          itemCount: snapshot.data.documents.length,
+//            itemBuilder: (context, index){
+//              return MessageTile(
+//                message: snapshot.data.documents[index].data["message"],
+//                sendByMe: Constants.myName == snapshot.data.documents[index].data["sendBy"],
+//              );
+//            }) : Container();
+//      },
+//    );
   }
 
   addMessage() {
@@ -56,22 +94,26 @@ class _ChatState extends State<Chat> {
 
   @override
   void initState() {
-    DatabaseMethods().getChats(widget.chatRoomId).then((val) {
-      setState(() {
-        chats = val;
-      });
-    });
+    chatMessages();
+//    DatabaseMethods().getChats(widget.chatRoomId).then((val) {
+//      setState(() {
+//         chats= val;
+//      });
+//    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarMain(context),
+      appBar:AppBar(
+        title: Text("BONTA"),
+      ),
       body: Container(
-        child: Stack(
+        child: Column(
           children: [
-            chatMessages(),
+            Container(child: chatMessages()),
+
             Container(alignment: Alignment.bottomCenter,
               width: MediaQuery
                   .of(context)
@@ -98,7 +140,9 @@ class _ChatState extends State<Chat> {
                     SizedBox(width: 16,),
                     GestureDetector(
                       onTap: () {
+
                         addMessage();
+
                       },
                       child: Container(
                           height: 40,
@@ -164,19 +208,19 @@ class MessageTile extends StatelessWidget {
           bottomRight: Radius.circular(23)),
             gradient: LinearGradient(
               colors: sendByMe ? [
-                const Color(0xff007EF4),
+                Colors.blue,
                 const Color(0xff2A75BC)
               ]
                   : [
-                const Color(0x1AFFFFFF),
-                const Color(0x1AFFFFFF)
+                Color(0xffff716d),
+                Color(0xffffc371),
               ],
             )
         ),
         child: Text(message,
             textAlign: TextAlign.start,
             style: TextStyle(
-            color: Colors.white,
+            color: Colors.black,
             fontSize: 16,
             fontFamily: 'OverpassRegular',
             fontWeight: FontWeight.w300)),

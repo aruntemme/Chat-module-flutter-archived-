@@ -1,3 +1,5 @@
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutterapp/helper/authenticate.dart';
 import 'package:flutterapp/helper/constants.dart';
 import 'package:flutterapp/helper/helperfunctions.dart';
@@ -13,9 +15,70 @@ class ChatRoom extends StatefulWidget {
   _ChatRoomState createState() => _ChatRoomState();
 }
 
+
 class _ChatRoomState extends State<ChatRoom> {
+
+
+  DatabaseMethods databaseMethods = new DatabaseMethods();
+  TextEditingController searchEditingController = new TextEditingController();
+  QuerySnapshot searchResultSnapshot;
+
+  initiateSearch(String userName) async {
+    if(userName.isNotEmpty){
+      setState(() {
+
+      });
+      await databaseMethods.searchByName(searchEditingController.text)
+          .then((snapshot){
+        searchResultSnapshot = snapshot;
+        print("$searchResultSnapshot");
+      });
+    }
+  }
+
+  Widget userList(){
+    return ListView.builder(
+        shrinkWrap: true,
+        itemCount: searchResultSnapshot.documents.length,
+        itemBuilder: (context, index){
+          return Text(
+            searchResultSnapshot.documents[index].data["fullName"],
+
+          );
+        });
+  }
+
   Stream chatRooms;
   String fullName;
+
+
+//
+//  DatabaseMethods databaseMethods = new DatabaseMethods();
+//  TextEditingController searchEditingController = new TextEditingController();
+//  QuerySnapshot searchResultSnapshot;
+//  initiateSearch(var userName) async {
+//    searchEditingController = userName;
+//      await databaseMethods.searchByName(searchEditingController.text)
+//          .then((snapshot){
+//        searchResultSnapshot = snapshot;
+//        print("$searchResultSnapshot");
+//        userList();
+//      });
+//
+//  }
+//Widget userList(){
+//  return ListView.builder(
+//      shrinkWrap: true,
+//      itemCount: searchResultSnapshot.documents.length,
+//      itemBuilder: (context, index){
+//        return
+//          searchResultSnapshot.documents[index].data["fullName"];
+//
+//
+//      });
+//}
+
+
 
   Widget chatRoomsList() {
     return StreamBuilder(
@@ -23,6 +86,7 @@ class _ChatRoomState extends State<ChatRoom> {
       builder: (context, snapshot) {
         return snapshot.hasData
             ? ListView.builder(
+          reverse: true,
                 itemCount: snapshot.data.documents.length,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
@@ -32,7 +96,7 @@ class _ChatRoomState extends State<ChatRoom> {
                         .replaceAll("_", "")
                         .replaceAll(Constants.myName, ""),
                     chatRoomId: snapshot.data.documents[index].data["chatRoomId"],
-                    fullName:fullName,
+                 //   fullName: searchResultSnapshot.documents[index].data["fullName"],
                   );
                 })
             : Container();
@@ -40,15 +104,18 @@ class _ChatRoomState extends State<ChatRoom> {
     );
   }
 
+
   @override
   void initState() {
     getUserInfogetChats();
+    initiateSearch(Constants.myName);
     super.initState();
   }
 
   getUserInfogetChats() async {
     Constants.myName = await HelperFunctions.getUserNameSharedPreference();
-    fullName = await HelperFunctions.getUserFullNameSharedPreference();
+
+    print(Constants.myName);
     DatabaseMethods().getUserChats(Constants.myName).then((snapshots) {
       setState(() {
         chatRooms = snapshots;
@@ -97,10 +164,12 @@ class _ChatRoomState extends State<ChatRoom> {
 
 class ChatRoomsTile extends StatelessWidget {
   final String userName;
-  final String fullName;
   final String chatRoomId;
 
-  ChatRoomsTile({this.userName,@required this.chatRoomId,this.fullName});
+  static ChatRoom chatRoom = new ChatRoom();
+  ChatRoomsTile({this.userName,@required this.chatRoomId});
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +192,7 @@ class ChatRoomsTile extends StatelessWidget {
               decoration: BoxDecoration(
                   color: CustomTheme.colorAccent,
                   borderRadius: BorderRadius.circular(30)),
-              child: Text(fullName.substring(0, 1),
+              child: Text(userName.substring(0, 1),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Colors.white,

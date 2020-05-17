@@ -1,5 +1,4 @@
 import 'package:flutterapp/helper/constants.dart';
-import 'package:flutterapp/models/user.dart';
 import 'package:flutterapp/services/database.dart';
 import 'package:flutterapp/views/chat.dart';
 import 'package:flutterapp/widget/widget.dart';
@@ -45,6 +44,8 @@ class _SearchState extends State<Search> {
         return userTile(
           searchResultSnapshot.documents[index].data["userName"],
           searchResultSnapshot.documents[index].data["userEmail"],
+          searchResultSnapshot.documents[index].data["fullName"],
+
         );
         }) : Container();
   }
@@ -54,10 +55,12 @@ class _SearchState extends State<Search> {
     List<String> users = [Constants.myName,userName];
 
     String chatRoomId = getChatRoomId(Constants.myName,userName);
+    String fullName = getChatRoomId(Constants.myName,userName);
 
     Map<String, dynamic> chatRoom = {
       "users": users,
       "chatRoomId" : chatRoomId,
+      "fullName" : fullName,
     };
 
     databaseMethods.addChatRoom(chatRoom, chatRoomId);
@@ -70,7 +73,7 @@ class _SearchState extends State<Search> {
 
   }
 
-  Widget userTile(String userName,String userEmail){
+  Widget userTile(String userName,String userEmail, String fullName){
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       child: Row(
@@ -78,6 +81,13 @@ class _SearchState extends State<Search> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text(
+                fullName,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16
+                ),
+              ),
               Text(
                 userName,
                 style: TextStyle(
