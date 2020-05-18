@@ -2,7 +2,7 @@ import 'package:flutterapp/helper/authenticate.dart';
 import 'package:flutterapp/helper/helperfunctions.dart';
 import 'package:flutterapp/views/chatrooms.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutterapp/helper/constants.dart';
 void main() {
   runApp(MyApp());
 }
@@ -37,9 +37,9 @@ class _MyAppState extends State<MyApp> {
       title: 'FlutterChat',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: Color(0xff145C9E),
+        primaryColor: kPrimaryColor,
         scaffoldBackgroundColor: Colors.white,
-        accentColor: Color(0xff007EF4),
+        accentColor: kBorderColor,
         fontFamily: "OverpassRegular",
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),

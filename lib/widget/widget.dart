@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutterapp/helper/constants.dart';
 Widget appBarMain(BuildContext context) {
   return AppBar(
-    title: Image.asset(
-      "assets/images/logo.png",
-      height: 40,
+    flexibleSpace: Container(
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: <Color>[
+                kPrimaryColor,
+                Color(0xFF67eaa4),
+                Color(0xFF48e9f2),
+              ])),
+    ),
+    title: Text(
+      'BONTA',
+      style: TextStyle(
+        fontSize: 20.0,
+      ),
     ),
     elevation: 0.0,
     centerTitle: false,

@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutterapp/helper/constants.dart';
 import 'package:flutterapp/services/database.dart';
 import 'package:flutterapp/widget/widget.dart';
@@ -17,7 +19,7 @@ class Chat extends StatefulWidget {
 
 class _ChatState extends State<Chat> {
   final _firestore = Firestore.instance;
-
+  ChatRoom chatRoom = ChatRoom();
   Stream<QuerySnapshot> chats;
   TextEditingController messageEditingController = new TextEditingController();
 
@@ -107,9 +109,36 @@ class _ChatState extends State<Chat> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar:AppBar(
-        title: Text("BONTA"),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.centerRight,
+                  colors: <Color>[
+                    kPrimaryColor,
+                    Color(0xFF67eaa4),
+
+                  ])),
+        ),
+        title: Text(
+          'BONTA',
+          style: TextStyle(
+            fontSize: 20.0,
+          ),
+        ),
+        elevation: 0.0,
+        centerTitle: false,
       ),
       body: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: <Color>[
+                  kPrimaryColor,
+                  Color(0xFF67eaa4),
+                  Color(0xFF48e9f2),
+                ])),
         child: Column(
           children: [
             Container(child: chatMessages()),
@@ -120,8 +149,12 @@ class _ChatState extends State<Chat> {
                   .size
                   .width,
               child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0),topRight: Radius.circular(30.0)),
+                  color: Color(0x95FFFFFF),
+                ),
                 padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-                color: Color(0x54FFFFFF),
+
                 child: Row(
                   children: [
                     Expanded(
@@ -129,10 +162,10 @@ class _ChatState extends State<Chat> {
                           controller: messageEditingController,
                           style: simpleTextStyle(),
                           decoration: InputDecoration(
-                              hintText: "Message ...",
+                              hintText: "Type a message ",
                               hintStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
+                                color: Colors.black,
+                                fontSize: 20,
                               ),
                               border: InputBorder.none
                           ),
@@ -149,13 +182,13 @@ class _ChatState extends State<Chat> {
                           width: 40,
                           decoration: BoxDecoration(
                               gradient: LinearGradient(
-                                  colors: [
-                                    const Color(0x36FFFFFF),
-                                    const Color(0x0FFFFFFF)
-                                  ],
-                                  begin: FractionalOffset.topLeft,
-                                  end: FractionalOffset.bottomRight
-                              ),
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: <Color>[
+                                    kPrimaryColor,
+                                    Color(0xFF67eaa4),
+                                    Color(0xFF48e9f2),
+                                  ]),
                               borderRadius: BorderRadius.circular(40)
                           ),
                           padding: EdgeInsets.all(12),

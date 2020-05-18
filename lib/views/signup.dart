@@ -7,6 +7,7 @@ import 'package:flutterapp/views/chatrooms.dart';
 import 'package:flutterapp/widget/widget.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterapp/helper/constants.dart';
 
 class SignUp extends StatefulWidget {
   final Function toggleView;
@@ -85,193 +86,227 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarMain(context),
       body: ModalProgressHUD(
+        color: kBorderColor,
         inAsyncCall: showSpinner,
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            children: [
-              Spacer(),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextField(
-                      decoration: InputDecoration(
-                        labelText: "Full Name",
-                        labelStyle: TextStyle(fontSize: 14,color: Colors.grey.shade400,fontWeight: FontWeight.w600),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: Colors.grey.shade300),
+        child: SafeArea(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 24),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 30,
+                ),
+                Text(
+                  "Welcome,",
+                  style:
+                  TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 6,
+                ),
+                Text(
+                  "Create New Account",
+                  style:
+                  TextStyle(fontSize: 20, color: Colors.blueGrey[400], fontWeight: FontWeight.bold),
+                ),
+                Spacer(),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextField(
+                        decoration: InputDecoration(
+                          labelText: "Full Name",
+                          labelStyle: TextStyle(fontSize: 14,color: Colors.blueGrey[400],fontWeight: FontWeight.w600),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.blueGrey[600]),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: kBorderColor),
+                          ),
+                          floatingLabelBehavior: FloatingLabelBehavior.auto,
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: Colors.red),
-                        ),
-                        floatingLabelBehavior: FloatingLabelBehavior.auto,
-                      ),
-                      onChanged: (value) {
-                        fullName = value;
-                      },
-                    ),
-                    TextField(
-                      decoration: InputDecoration(
-                        labelText: "Address or Company",
-                        labelStyle: TextStyle(fontSize: 14,color: Colors.grey.shade400,fontWeight: FontWeight.w600),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: Colors.grey.shade300),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: Colors.red),
-                        ),
-                        floatingLabelBehavior: FloatingLabelBehavior.auto,
-                      ),
-                      onChanged: (value) {
-                        userAddress= value;
-                      },
-                    ),
-                    TextField(
-                      decoration: InputDecoration(
-                        labelText: "Phone Number",
-                        labelStyle: TextStyle(fontSize: 14,color: Colors.grey.shade400,fontWeight: FontWeight.w600),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: Colors.grey.shade300),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: Colors.red),
-                        ),
-                        floatingLabelBehavior: FloatingLabelBehavior.auto,
-                      ),
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) {
-                        userName = value;
-                      },
-                    ),
-                    DropdownButton(
-                        isExpanded: true,
-                        underline: SizedBox(),
-                        icon: Icon(
-                          Icons.arrow_drop_down
-                        ),
-                        value: prof,
-                        items: getDropdownItems(),
                         onChanged: (value) {
-                          setState(() {
-                            prof = value;
-                          });
+                          fullName = value;
                         },
+                      ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      TextField(
+                        decoration: InputDecoration(
+                          labelText: "Phone Number",
+                          labelStyle: TextStyle(fontSize: 14,color: Colors.blueGrey[400],fontWeight: FontWeight.w600),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.blueGrey[600]),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: kBorderColor),
+                          ),
+                          floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        ),
+                        keyboardType: TextInputType.number,
+                        onChanged: (value) {
+                          userName = value;
+                        },
+                      ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      Container(
+                        height: 58.0,
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          border: Border.all(
+                              color: Colors.blueGrey[600], style: BorderStyle.solid, width: 0.80),
+                        ),
+                        child: DropdownButton(
+                          style: TextStyle(
+                            color: Colors.blueGrey[400],
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w600,
+                          ),
+                            isExpanded: true,
+                            underline: SizedBox(
+                            ),
+                            icon: Icon(
+                              Icons.arrow_drop_down
+                            ),
+                            value: prof,
+                            items: getDropdownItems(),
+                            onChanged: (value) {
+                              setState(() {
+                                prof = value;
+                              });
+                            },
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      TextField(
+                        decoration: InputDecoration(
+                          labelText: "Email",
+                          labelStyle: TextStyle(fontSize: 14,color: Colors.blueGrey[400],fontWeight: FontWeight.w600),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.blueGrey[600]),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: kBorderColor),
+                          ),
+                          floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        ),
+                        keyboardType: TextInputType.emailAddress,
+                        onChanged: (value) {
+                          userEmail = value;
+                        },
+                      ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      TextField(
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          labelText: "Password",
+                          labelStyle: TextStyle(fontSize: 14,color: Colors.blueGrey[400],fontWeight: FontWeight.w600),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.blueGrey[600]),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: kBorderColor),
+                          ),
+                          floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        ),
+                        keyboardType: TextInputType.emailAddress,
+                        onChanged: (value) {
+                          password = value;
+                        },
+                      ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                    ],
 
-                    ),
-                    TextField(
-                      decoration: InputDecoration(
-                        labelText: "Email",
-                        labelStyle: TextStyle(fontSize: 14,color: Colors.grey.shade400,fontWeight: FontWeight.w600),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: Colors.grey.shade300),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                Container(
+                  height: 50,
+                  width: double.infinity,
+                  child: FlatButton(
+                    onPressed: (){
+                      showSpinner = true;
+                      singUp();
+                    },
+                    padding: EdgeInsets.all(0),
+                    child: Ink(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        gradient: LinearGradient(
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          colors: [
+                            Color(0xff0be578),
+                            Color(0xFF53D192),
+                            Color(0xff00bbff),
+                          ],
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: Colors.red),
-                        ),
-                        floatingLabelBehavior: FloatingLabelBehavior.auto,
                       ),
-                      keyboardType: TextInputType.emailAddress,
-                      onChanged: (value) {
-                        userEmail = value;
-                      },
-                    ),
-                    TextField(
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        labelText: "Password",
-                        labelStyle: TextStyle(fontSize: 14,color: Colors.grey.shade400,fontWeight: FontWeight.w600),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: Colors.grey.shade300),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: Colors.red),
-                        ),
-                        floatingLabelBehavior: FloatingLabelBehavior.auto,
+                      child: Container(
+                        alignment: Alignment.center,
+                        constraints: BoxConstraints(maxWidth: double.infinity,minHeight: 50),
+                        child: Text("Login",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
                       ),
-                      keyboardType: TextInputType.emailAddress,
-                      onChanged: (value) {
-                        password = value;
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Already have an account? ",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        widget.toggleView();
                       },
+                      child: Text(
+                        "SignIn now",
+                        style: TextStyle(
+                            color: kBorderColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            ),
+                      ),
                     ),
                   ],
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              GestureDetector(
-                onTap: (){
-                  showSpinner = true;
-                  singUp();
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      gradient: LinearGradient(
-                        colors: [const Color(0xff007EF4), const Color(0xff2A75BC)],
-                      )),
-                  width: MediaQuery.of(context).size.width,
-                  child: Text(
-                    "Sign Up",
-                    style: biggerTextStyle(),
-                    textAlign: TextAlign.center,
-                  ),
                 ),
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30), color: Colors.white),
-                width: MediaQuery.of(context).size.width,
-                child: Text(
-                  "Sign Up with Google",
-                  style: TextStyle(fontSize: 17, color: CustomTheme.textColor),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Already have an account? ",
-                    style: simpleTextStyle(),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      widget.toggleView();
-                    },
-                    child: Text(
-                      "SignIn now",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          decoration: TextDecoration.underline),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 50,
-              )
-            ],
+                SizedBox(
+                  height: 50,
+                )
+              ],
+            ),
           ),
         ),
       ),

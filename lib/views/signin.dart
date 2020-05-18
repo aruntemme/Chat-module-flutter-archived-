@@ -52,7 +52,6 @@ class _SignInState extends State<SignIn> {
         } else {
           setState(() {
             isLoading = false;
-            //show snackbar
           });
         }
       });
@@ -84,74 +83,86 @@ class _SignInState extends State<SignIn> {
                     ),
                     Text(
                       "Sign in to continue!",
-                      style:
-                          TextStyle(fontSize: 20, color: Colors.grey.shade400),
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.blueGrey[400],
+                          fontWeight: FontWeight.bold),
                     ),
-
                     Spacer(),
                     Form(
                       key: formKey,
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          decoration: InputDecoration(
-                            hintStyle: kTextStyleBlack,
-                            labelText: "Email ID",
-                            labelStyle: TextStyle(
-                                fontSize: 14, color: Colors.blueGrey[300]),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                color: Colors.blueGrey[600],
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
+                      child: Column(
+                        children: [
+                          TextFormField(
+                            decoration: InputDecoration(
+                              hintStyle: kTextStyleBlack,
+                              labelText: "Email ID",
+                              labelStyle: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.blueGrey[400],
+                                  fontWeight: FontWeight.bold),
+                              enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: BorderSide(
-                                  color: Colors.red,
-                                )),
-                          ),
-                          keyboardType: TextInputType.emailAddress,
-                          validator: (val) {
-                            return RegExp(
-                                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                    .hasMatch(val)
-                                ? null
-                                : "Please Enter Correct Email";
-                          },
-                          controller: emailEditingController,
-                          style: simpleTextStyle(),
-                        ),
-                        SizedBox(height: 16,),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            labelText: "Password",
-                            labelStyle: TextStyle(
-                                fontSize: 14, color: Colors.blueGrey[300]),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                color: Colors.blueGrey[600],
+                                  color: Colors.blueGrey[600],
+                                ),
                               ),
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    color: kBorderColor,
+                                  )),
                             ),
-                            focusedBorder: OutlineInputBorder(
+                            keyboardType: TextInputType.emailAddress,
+                            validator: (val) {
+                              return RegExp(
+                                          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                      .hasMatch(val)
+                                  ? null
+                                  : "Please Enter Correct Email";
+                            },
+                            controller: emailEditingController,
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.blueGrey[700],
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          TextFormField(
+                            decoration: InputDecoration(
+                              labelText: "Password",
+                              labelStyle: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.blueGrey[400],
+                                  fontWeight: FontWeight.bold),
+                              enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: BorderSide(
-                                  color: Colors.red,
-                                )),
+                                  color: Colors.blueGrey[600],
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    color: kBorderColor,
+                                  )),
+                            ),
+                            obscureText: true,
+                            validator: (val) {
+                              return val.length >= 6
+                                  ? null
+                                  : "Enter Password More than 6 letters";
+                            },
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.blueGrey[700],
+                                fontWeight: FontWeight.bold),
+                            controller: passwordEditingController,
                           ),
-                          obscureText: true,
-                          validator: (val) {
-                            return val.length >= 6
-                                ? null
-                                : "Enter Password More than 6 letters";
-                          },
-                          style: simpleTextStyle(),
-                          controller: passwordEditingController,
-
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
                     ),
                     SizedBox(
                       height: 16,
@@ -183,7 +194,7 @@ class _SignInState extends State<SignIn> {
                       height: 50,
                       width: double.infinity,
                       child: FlatButton(
-                        onPressed: (){
+                        onPressed: () {
                           signIn();
                         },
                         padding: EdgeInsets.all(0),
@@ -194,16 +205,23 @@ class _SignInState extends State<SignIn> {
                               begin: Alignment.centerLeft,
                               end: Alignment.centerRight,
                               colors: [
-                                Color(0xffff5f6d),
-                                Color(0xffff716d),
-                                Color(0xffffc371),
+                                Color(0xff0be578),
+                                Color(0xFF53D192),
+                                Color(0xff00bbff),
                               ],
                             ),
                           ),
                           child: Container(
                             alignment: Alignment.center,
-                            constraints: BoxConstraints(maxWidth: double.infinity,minHeight: 50),
-                            child: Text("Login",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
+                            constraints: BoxConstraints(
+                                maxWidth: double.infinity, minHeight: 50),
+                            child: Text(
+                              "Login",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                         ),
                         shape: RoundedRectangleBorder(
@@ -214,19 +232,27 @@ class _SignInState extends State<SignIn> {
                     SizedBox(
                       height: 16,
                     ),
-
                     SizedBox(
                       height: 16,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Text("I'm a new user.",style: TextStyle(fontWeight: FontWeight.bold),),
+                        Text(
+                          "I'm a new user.",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                         GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             widget.toggleView();
                           },
-                          child: Text("Sign up",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.red),),
+                          child: Text(
+                            "Sign up",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xff0be578),
+                            ),
+                          ),
                         )
                       ],
                     ),
