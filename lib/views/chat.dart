@@ -18,6 +18,8 @@ class Chat extends StatefulWidget {
 }
 
 class _ChatState extends State<Chat> {
+
+
   final _firestore = Firestore.instance;
   ChatRoom chatRoom = ChatRoom();
   Stream<QuerySnapshot> chats;
@@ -44,10 +46,11 @@ class _ChatState extends State<Chat> {
           for (var message in messages) {
             final messageText = message.data['message'];
             final messageSender = message.data['sendBy'];
-        //    final messageTime = message.data['time'] as Timestamp; //add this
+            Constants.fullTime  = DateTime.fromMillisecondsSinceEpoch(message.data['time']);
             final messageBubble = MessageTile(
               message: messageText,
               sendByMe: Constants.myName == messageSender,
+              time: Constants.myFullName.toString(),
             );
 
             messageBubbles.add(messageBubble);
@@ -77,6 +80,10 @@ class _ChatState extends State<Chat> {
   }
 
   addMessage() {
+    Constants.currentTime = DateTime
+        .now()
+        .millisecondsSinceEpoch;
+
     if (messageEditingController.text.isNotEmpty) {
       Map<String, dynamic> chatMessageMap = {
         "sendBy": Constants.myName,
@@ -86,6 +93,12 @@ class _ChatState extends State<Chat> {
             .millisecondsSinceEpoch,
       };
 
+      Map<String, dynamic> time = {
+        "time" :  DateTime
+            .now()
+            .millisecondsSinceEpoch,
+      };
+      DatabaseMethods().updateTime(time, widget.chatRoomId);
       DatabaseMethods().addMessage(widget.chatRoomId, chatMessageMap);
 
       setState(() {
@@ -117,7 +130,6 @@ class _ChatState extends State<Chat> {
                   colors: <Color>[
                     kPrimaryColor,
                     Color(0xFF67eaa4),
-
                   ])),
         ),
         title: Text(
@@ -130,15 +142,6 @@ class _ChatState extends State<Chat> {
         centerTitle: false,
       ),
       body: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: <Color>[
-                  kPrimaryColor,
-                  Color(0xFF67eaa4),
-                  Color(0xFF48e9f2),
-                ])),
         child: Column(
           children: [
             Container(child: chatMessages()),
@@ -151,7 +154,7 @@ class _ChatState extends State<Chat> {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0),topRight: Radius.circular(30.0)),
-                  color: Color(0x95FFFFFF),
+                  color: Color(0x95bcbcbc),
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
 
@@ -160,7 +163,10 @@ class _ChatState extends State<Chat> {
                     Expanded(
                         child: TextField(
                           controller: messageEditingController,
-                          style: simpleTextStyle(),
+                          style: TextStyle(
+                            color: Colors.black,
+
+                          ),
                           decoration: InputDecoration(
                               hintText: "Type a message ",
                               hintStyle: TextStyle(
@@ -210,8 +216,9 @@ class _ChatState extends State<Chat> {
 class MessageTile extends StatelessWidget {
   final String message;
   final bool sendByMe;
+  final String time;
 
-  MessageTile({@required this.message, @required this.sendByMe});
+  MessageTile({@required this.message, @required this.sendByMe, this.time});
 
 
   @override
@@ -223,40 +230,45 @@ class MessageTile extends StatelessWidget {
           left: sendByMe ? 0 : 24,
           right: sendByMe ? 24 : 0),
       alignment: sendByMe ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        margin: sendByMe
-            ? EdgeInsets.only(left: 30)
-            : EdgeInsets.only(right: 30),
-        padding: EdgeInsets.only(
-            top: 17, bottom: 17, left: 20, right: 20),
-        decoration: BoxDecoration(
-            borderRadius: sendByMe ? BorderRadius.only(
-                topLeft: Radius.circular(23),
-                topRight: Radius.circular(23),
-                bottomLeft: Radius.circular(23)
-            ) :
-            BorderRadius.only(
-        topLeft: Radius.circular(23),
-          topRight: Radius.circular(23),
-          bottomRight: Radius.circular(23)),
-            gradient: LinearGradient(
-              colors: sendByMe ? [
-                Colors.blue,
-                const Color(0xff2A75BC)
-              ]
-                  : [
-                Color(0xffff716d),
-                Color(0xffffc371),
-              ],
-            )
-        ),
-        child: Text(message,
-            textAlign: TextAlign.start,
-            style: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-            fontFamily: 'OverpassRegular',
-            fontWeight: FontWeight.w300)),
+      child: Column(
+        children: <Widget>[
+          Container(
+            margin: sendByMe
+                ? EdgeInsets.only(left: 30)
+                : EdgeInsets.only(right: 30),
+            padding: EdgeInsets.only(
+                top: 17, bottom: 17, left: 20, right: 20),
+            decoration: BoxDecoration(
+                borderRadius: sendByMe ? BorderRadius.only(
+                    topLeft: Radius.circular(23),
+                    topRight: Radius.circular(23),
+                    bottomLeft: Radius.circular(23)
+                ) :
+                BorderRadius.only(
+            topLeft: Radius.circular(23),
+              topRight: Radius.circular(23),
+              bottomRight: Radius.circular(23)),
+                gradient: LinearGradient(
+                  colors: sendByMe ? [
+                    Colors.blue,
+                    const Color(0xff2A75BC)
+                  ]
+                      : [
+                    Color(0xffff716d),
+                    Color(0xffffc371),
+                  ],
+                )
+            ),
+            child: Text(message,
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                fontFamily: 'OverpassRegular',
+                fontWeight: FontWeight.w300)),
+          ),
+          Text(time)
+        ],
       ),
     );
   }

@@ -1,4 +1,5 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -6,7 +7,8 @@ class Constants{
 
   static String myName = "";
   static String myFullName = "";
-
+  static int currentTime;
+  static DateTime fullTime;
 }
 
 

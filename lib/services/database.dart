@@ -17,16 +17,6 @@ class DatabaseMethods {
     });
   }
 
-//  getFullName(String email) async {
-//    return Firestore.instance
-//        .collection("users")
-//        .where("fullName", isEqualTo: email)
-//        .getDocuments()
-//        .catchError((e) {
-//      print(e.toString());
-//    });
-//  }
-
 
   searchByName(String searchField) {
     return Firestore.instance
@@ -34,12 +24,7 @@ class DatabaseMethods {
         .where('userName', isEqualTo: searchField)
         .getDocuments();
   }
-//  getFullName(String searchField) {
-//    return Firestore.instance
-//        .collection("users")
-//        .where('userName', isEqualTo: searchField)
-//        .getDocuments();
-//  }
+
 
   Future<bool> addChatRoom(chatRoom, chatRoomId) {
     Firestore.instance
@@ -50,6 +35,17 @@ class DatabaseMethods {
       print(e);
     });
   }
+
+  Future<bool> updateTime(time, chatRoomId) {
+    Firestore.instance
+        .collection("chatRoom")
+        .document(chatRoomId)
+        .updateData(time)
+        .catchError((e) {
+      print(e);
+    });
+  }
+
 
   getChats(String chatRoomId) async{
     return Firestore.instance

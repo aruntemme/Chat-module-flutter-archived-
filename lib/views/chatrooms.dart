@@ -20,57 +20,10 @@ class _ChatRoomState extends State<ChatRoom> {
   TextEditingController searchEditingController = new TextEditingController();
   QuerySnapshot searchResultSnapshot;
 
-  initiateSearch(String userName) async {
-    if (userName.isNotEmpty) {
-      setState(() {});
-      await databaseMethods
-          .searchByName(searchEditingController.text)
-          .then((snapshot) {
-        searchResultSnapshot = snapshot;
-        print("$searchResultSnapshot");
-      });
-    }
-  }
-
-  Widget userList() {
-    return ListView.builder(
-        shrinkWrap: true,
-        itemCount: searchResultSnapshot.documents.length,
-        itemBuilder: (context, index) {
-          return Text(
-            searchResultSnapshot.documents[index].data["fullName"],
-          );
-        });
-  }
 
   Stream chatRooms;
   String fullName;
 
-//
-//  DatabaseMethods databaseMethods = new DatabaseMethods();
-//  TextEditingController searchEditingController = new TextEditingController();
-//  QuerySnapshot searchResultSnapshot;
-//  initiateSearch(var userName) async {
-//    searchEditingController = userName;
-//      await databaseMethods.searchByName(searchEditingController.text)
-//          .then((snapshot){
-//        searchResultSnapshot = snapshot;
-//        print("$searchResultSnapshot");
-//        userList();
-//      });
-//
-//  }
-//Widget userList(){
-//  return ListView.builder(
-//      shrinkWrap: true,
-//      itemCount: searchResultSnapshot.documents.length,
-//      itemBuilder: (context, index){
-//        return
-//          searchResultSnapshot.documents[index].data["fullName"];
-//
-//
-//      });
-//}
 
   Widget chatRoomsList() {
     return StreamBuilder(
@@ -87,9 +40,9 @@ class _ChatRoomState extends State<ChatRoom> {
                         .toString()
                         .replaceAll("_", "")
                         .replaceAll(Constants.myName, ""),
-                    chatRoomId:
-                        snapshot.data.documents[index].data["chatRoomId"],
-                    //   fullName: searchResultSnapshot.documents[index].data["fullName"],
+                    chatRoomId:snapshot.data.documents[index].data["chatRoomId"],
+                    fullName: snapshot.data.documents[index].data["fullName"],
+                    time: snapshot.data.documents[index].data["time"],
                   );
                 })
             : Container();
@@ -100,7 +53,6 @@ class _ChatRoomState extends State<ChatRoom> {
   @override
   void initState() {
     getUserInfogetChats();
-    initiateSearch(Constants.myName);
     super.initState();
   }
 //TODO : update chatroom list after sending new messages
@@ -165,9 +117,11 @@ class _ChatRoomState extends State<ChatRoom> {
 class ChatRoomsTile extends StatelessWidget {
   final String userName;
   final String chatRoomId;
+  final String fullName;
+  final int time;
 
   static ChatRoom chatRoom = new ChatRoom();
-  ChatRoomsTile({this.userName, @required this.chatRoomId});
+  ChatRoomsTile({this.userName, @required this.chatRoomId, this.fullName,this.time});
 
   @override
   Widget build(BuildContext context) {
@@ -210,8 +164,7 @@ class ChatRoomsTile extends StatelessWidget {
             SizedBox(
               width: 22,
             ),
-            Text(userName,
-                //TODO : change username into FULLNAME
+            Text(fullName,
                 textAlign: TextAlign.start,
                 style: TextStyle(
                     color: Colors.black,

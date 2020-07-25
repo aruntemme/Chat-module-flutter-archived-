@@ -59,13 +59,18 @@ class _SearchState extends State<Search> {
     List<String> users = [Constants.myName, userName];
 
     String chatRoomId = getChatRoomId(Constants.myName, userName);
-    String fullName = getChatRoomId(Constants.myName, userName);
+    String fullName = Constants.myFullName;
 
     Map<String, dynamic> chatRoom = {
       "users": users,
       "chatRoomId": chatRoomId,
       "fullName": fullName,
+      "time" :  DateTime
+        .now()
+        .millisecondsSinceEpoch,
     };
+
+
 
     databaseMethods.addChatRoom(chatRoom, chatRoomId);
 
@@ -78,6 +83,7 @@ class _SearchState extends State<Search> {
   }
 
   Widget userTile(String userName, String userEmail, String fullName) {
+    Constants.myFullName = fullName;
     return Container(
       decoration: BoxDecoration(
 //          border: Border.all(
