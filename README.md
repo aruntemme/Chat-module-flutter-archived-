@@ -1,6 +1,6 @@
 # flutterapp
 
-A new Flutter application.
+[Work In Progress]
 
 ## Getting Started
 
